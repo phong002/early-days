@@ -1,0 +1,236 @@
+rem	Name: Paxton Hong Kar Jun (U1880220A)(Group 3)
+	clear screen
+	open window 800,800
+	window origin "lb"
+
+rem ***pacman***
+	x = 400
+	y = 400
+	r = 10
+
+rem ***yellow food***	
+	x1 = 500
+	y1 = 500
+	r1 = 5
+
+rem ***ghosts***	
+	x2 = 500
+	y2 = 500
+	r2 = 15
+	move_x = 15
+	move_y = 9
+	
+	k = 0
+	i = 0
+	v = 0
+	b = 0
+	p = 255
+	m = 0
+	n = 1
+	q = 255
+
+	xstep = 0
+	ystep = 0
+	
+	xpos = 0
+	ypos = 0
+	
+	text 200,450,"Game Instructions:","modern25","lb"
+	text 200,420,"1. Use arrow keys to move pacman","lb"
+	text 200,390,"2. Eat food","lb"
+	text 200,360,"3. Avoid ghosts","lb"
+	text 200,300,"Press any button to begin."
+	inkey$
+	
+100	clear window
+	backcolour 0,0,255
+	
+rem ***pacman body, eyes and mouth***
+	colour 255,255,0
+	fill circle x,y,r 
+	colour 0,0,0
+	fill circle x+3,y+2,2 
+	fill circle x-3,y+2,2 
+	fill rectangle x-5,y-2 to x+4,y-5
+	
+rem ***yellow food***
+	colour 255,255,0
+	fill circle x1,y1,r1
+
+rem ***ghost no. 1 design***	
+	colour 255,0,0
+	fill circle x2,y2,r2
+		colour 255,255,255
+		fill circle x2+5,y2+2,5
+		fill circle x2-2,y2+2,5
+			
+			colour 0,0,0
+			fill circle x2+7,y2+2,2
+			fill circle x2,y2+2,2
+				
+				colour 0,0,255
+				fill triangle x2-5,y2-18,	x2+5,y2-18,		x2,y2-8
+				fill triangle x2+2,y2-18,	x2+12,y2-18,	x2+7,y2-8
+				fill triangle x2-12,y2-18,	x2-3,y2-18,		x2-7,y2-8
+					
+rem ***ghost no. 2 design***
+	color 255,0,255
+	fill circle x2-30,y2-30,r2
+		colour 255,255,255
+		fill circle x2-25,y2-28,5
+		fill circle x2-32,y2-28,5	
+		
+			colour 0,0,0
+			fill circle x2-23,y2-28,2
+			fill circle x2-30,y2-28,2
+			
+				colour 0,0,255
+				fill triangle x2-35,y2-48,	x2-25,y2-48,	x2-30,y2-38
+				fill triangle x2-28,y2-48,	x2-18,y2-48,	x2-23,y2-38
+				fill triangle x2-42,y2-48,	x2-33,y2-48,	x2-37,y2-38
+	
+rem ***ghost no. 3 design***
+	color 0,255,255
+	fill circle x2+30,y2+30,r2
+		colour 255,255,255
+		fill circle x2+35,y2+32,5
+		fill circle x2+28,y2+32,5
+			
+			colour 0,0,0
+			fill circle x2+37,y2+32,2
+			fill circle x2+30,y2+32,2
+				
+				colour 0,0,255
+				fill triangle x2+25,y2+12,	x2+35,y2+12,	x2+30,y2+22
+				fill triangle x2+32,y2+12,	x2+42,y2+12,	x2+37,y2+22
+				fill triangle x2+18,y2+12,	x2+27,y2+12,	x2+23,y2+22
+	colour 0,0,0
+
+rem ***pacman fullness bar***
+	rectangle 100,700 to 700,690
+	fill rectangle 100,700 to 100+20*i,690
+
+rem ***in-game text***
+	colour 0,0,0
+	text 280,710,"Pacman's fullness:","lb"
+	text 280,200,"made by: paxton"
+
+rem ***end game instructions***	
+	colour 0,0,q
+	text 170,630,"Congratulations! You won!"
+	text 170,590,"Enter the yellow door to end the game."
+	colour v,b,p
+	fill rectangle 790,400 to 800,500
+
+rem ***movement of pacman***
+	x = x + xstep
+	y = y + ystep
+	
+rem ***movement of ghosts***
+	x2 = x2 + move_x
+	y2 = y2 + move_y
+	if(x2 > 800-r2) gosub tooright_1
+	if(x2 < r2) gosub tooleft_1
+	if(y2 > 800-r2) gosub toohigh_1
+	if(y2 < r2) gosub toolow_1
+	
+	
+	a$ = inkey$(0.04)
+	
+	if(a$ = "right") then
+	ystep = 0
+	xstep = 10
+	endif 
+	
+	if(a$ = "left") then
+	ystep = 0
+	xstep = -10
+	endif
+	
+	if(a$ = "up") then
+	ystep = 10
+	xstep = 0
+	endif 
+	
+	if(a$ = "down") then
+	ystep = -10
+	xstep = 0
+	endif
+	
+rem ***when pacman eats food***	
+	if( sqrt( (x - x1)^2 + (y - y1)^2 ) < r ) then
+	x1 = ran(600)+100
+	y1 = ran(400)+200
+	i = i + 5
+	endif
+	
+rem ***when ghosts eat pacman***
+rem ***variable n is used for walking through ghosts after game is won***
+	if( sqrt( (x - x2)^2 + (y - y2)^2 ) < r*n ) then
+	close window
+	print "Game over! You were eaten by a ghost."
+	endif
+	
+	if( sqrt( (x - (x2-30))^2 + (y - (y2-30))^2 ) < r*n ) then
+	close window
+	print "Game over! You were eaten by a ghost."
+	endif
+	
+	if( sqrt( (x - (x2+30))^2 + (y - (y2+30))^2 ) < r*n ) then
+	close window
+	print "Game over! You were eaten by a ghost."
+	endif
+	
+rem ***when game is won***
+	if(i >= 30) then
+	q = 0
+	v = 255
+	b = 255
+	p = 0
+	n = 0.0001
+	x1 = 900
+	x2 = 400
+	y2 = 500
+	if((x > 790) and (y >= 400) and (y <= 500)) close window
+	print "Congratulations! you won the game!"
+	endif
+
+rem ***pacman going through borders***
+	if(x>790) then
+	x = 10
+	endif
+	
+	if(x<10) then
+	x = 790
+	endif
+	
+	if(y>790) then
+	y = 10
+	endif
+	
+	if(y<10) then
+	y = 790
+	endif
+
+	goto 100
+	
+rem ***gosub subroutines***	
+	label tooright_1
+	x2 = 800 - r2
+	move_x = -move_x
+	return
+	
+	label tooleft_1
+	x2 = r2
+	move_x = -move_x
+	return
+	
+	label toohigh_1
+	y2 = 800 - r2
+	move_y = -move_y
+	return
+	
+	label toolow_1
+	y2 = r2
+	move_y = -move_y
+	return
