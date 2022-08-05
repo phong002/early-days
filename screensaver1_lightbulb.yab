@@ -1,0 +1,121 @@
+rem	Name: Paxton Hong Kar Jun (U1880220A)(Group 3)
+	open window 800,800
+	window origin "lb"
+	
+	x = 450
+	y = 300
+	r = 50
+	move_x = 50
+	move_y = 10
+	
+	j = 0
+	k = 128
+	l = 128
+	q = 0
+	p = 13
+	
+100	clear window
+	backcolour 0,128,128
+	
+	colour 253,179,43
+	fill circle x,y,r
+	
+	colour 0,0,0
+	text 10,460,"OFF","modern","lb"
+	text 775,510,"ON","modern","lb"
+	text 140,670,"''I have not failed. I've just found 10,000 ways that won't work.''"
+	text 300,640,"-Thomas A. Edison"
+	
+rem ***left switch design***
+	colour 0,0,0
+	fill rectangle 0,350 to 5,450
+	colour 255,0,0
+	fill rectangle 7,360 to 20-p,440
+
+rem ***right switch design***	
+	colour 0,0,0
+	fill rectangle 800,400 to 795,500
+	colour 255,0,0
+	fill rectangle 793,410 to 780+q,490
+	
+rem ***lightbulb design***
+	colour 0,0,0
+	line 400,800 to 400,790
+		colour j,k,l
+		fill circle 400,758,18
+		colour 0,0,0
+		circle 400,758,18
+			colour 128,128,128
+			fill circle 400,780,10
+			fill rectangle 410,780 to 390,770
+				colour 0,0,0
+				line 397,770 to 396,760
+				line 403,770 to 404,760
+					colour 255,255,255
+					line 395,777 to 405,777
+					line 395,780 to 405,780
+					line 395,783 to 405,783
+						colour j,k,l
+						line 364,758 to 375,758						
+						line 382,745 to 371,738						
+						line 400,733 to 400,724
+						line 417,745 to 428,738
+						line 425,758 to 434,758
+						
+	pause(0.04)
+	gosub move_ball
+
+	if(x > 800-r) gosub tooright_1
+	if(x < r) gosub tooleft_1
+	if(y > 800-r) gosub toohigh_1
+	if(y < r) gosub toolow_1
+	
+	if( (x > 710) and (y >= 400) and  (y <= 500) ) gosub offswitch
+	if( (x < 90) and (y >= 350) and (y <= 450) ) gosub onswitch
+
+	goto 100
+	end
+	
+rem	******************************* gosub subroutines******************************
+	label move_ball
+	x = x + move_x
+	y = y + move_y
+	return
+	
+rem ***ball bounce***
+	label tooright_1
+	x = 800 - r
+	move_x = -move_x
+	return
+	
+	label tooleft_1
+	x = r
+	move_x = -move_x
+	return
+	
+	label toohigh_1
+	y = 800 - r
+	move_y = -move_y
+	return
+	
+	label toolow_1
+	y = r
+	move_y = -move_y
+	return
+
+rem ***on and off switch***	
+	label offswitch
+	q = 13
+	p = 0
+	j = 255
+	k = 255
+	l = 0
+	return
+	
+	label onswitch
+	q = 0
+	p = 13
+	j = 0
+	k = 128
+	l = 128
+	return
